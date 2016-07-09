@@ -1,0 +1,105 @@
+<!doctype html>
+
+<!--
+  * Assign angular module and controller
+  * Initialize the page by getting all the todos
+  * Loop over the todos
+  * Have a form to create todos
+  * Delete todos when they are checked
+-->
+
+<!-- ASSIGN OUR ANGULAR MODULE -->
+<html ng-app="scotchToDo">  <!-- We use this directive to *auto-bootstrap* an AngularJS app
+                                The ngApp directive designates the "ROOT ELEMENT" of the app
+                                typically placed near the ROOT ELEMENT of the page, e.g. on the <body> or <html> tags
+
+                                * Only 1 AngularJS app can be auto-bootstrapped per HTML doc
+                                * The first ngApp found in document will be used to define the ROOT ELEMENT to auto-bootstrap as an app
+                                * To run multiple apps in an HTML doc, you must MANUALLY bootstrap them using "angular.bootstrap" instead
+                                * AngularJS apps can't be nested in each other.
+                                * Don't use a directive that uses "TRANSCLUSION" on the same element as an ngApp
+                                * ngApp is the easiest, and most common way to bootstrap an app -->
+
+<head>
+  <!-- META -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Optimize mobile viewport -->
+
+  <title>Node/Angular Todo App</title>
+
+  <!-- SCROLLS -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"><!-- load bootstrap -->
+  <style>
+    html          { overflow-y:scroll; }
+    body          { padding-top:50px; }
+    #todo-list    { margin-bottom:30px; }
+  </style>
+
+  <!-- SPELLS -->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><!-- load jquery -->
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script><!-- load angular -->
+  <script src="core.js"></script>
+</head>
+
+<!-- SET THE CONTROLLER AND GET ALL TODOS -->
+<body ng-controller="mainController">
+  <div class="container"> <!-- A bootstrap function, it is a ".container" for a "responsive, fixed width container". Use ".container-fluid" for a "full width container, spanning entire width of viewport". -->
+
+    <!-- HEADER AND TODO COUNT -->
+    <div class="jumbotron text-center"> <!-- bootstrap for a big box calling extra attention to some special content or info -->
+      <h1>I'm a Todo-aholic <span class="label label-info">{{ todos.length }}</span></h1> <!-- BOOTSTRAP: "Labels" provide "additional information about something".
+                                                                                            They are followed by 1 of 6 "contextual classes": label-default;
+                                                                                            label-primary; label-success; label-info; label-warning; label-danger -->
+    </div>
+
+    <!-- TODO LIST -->
+    <div id="todo-list" class="row"> <!-- BOOTSTRAP: Grid system. Allows 12 columns per page. Big screens are better with columns. Small screens are better with stacked items. -->
+      <div class="col-sm-4 col-sm-offset-4"> <!-- col-sm == Small Devices, i.e. tablets. This is a column of width 4/12, offset from the left by 4/12. It occupies the middle 3rd of the screen. -->
+
+        <!-- LOOP OVER THE TODOS IN $scope.todos -->
+        <div class="checkbox" ng-repeat="todo in todos"> <!-- A "checkbox" is a "form control". There are 5 "form controls": input; textarea; checkbox; radio; select.
+                                                         ngRepeat is from Angular. It is a "directive" in the module "ng".
+                                                         The "ngRepeat" directive instantiates a "template", once per item, from a collection.
+                                                         In this case, our collection is "todos".
+                                                         Each "template" instance gets its own "scope".
+                                                         The given "loop variable" is set to the current "collection item".
+                                                         "$index" is set to the item "index" or "key".
+                                                         "todo in todos" is the expression, specifying how to loop the collection. -->
+          <label>
+            <input type="checkbox" ng-click="deleteTodo(todo._id)"> {{ todo.text }} <!-- ngClick: allows you to specify custom behaviour when an element is clicked. -->
+          </label>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 3 standard rules for Bootstrap forms:
+      1. Always use "<form role="form">". It helps improve accessibility for people using screen readers.
+      2. Wrap labels and form controls in "<div class="form-group">". This is needed for optimum spacing.
+      3. Add class ".form-control" to all textual <input>, <textarea> and <select> elements. -->
+
+    <!-- FORM TO CREATE TODOS -->
+    <div id="todo-form" class="row">
+      <div class="col-sm-8 col-sm-offset-2 text-center"> <!-- Is 8/12 (or 3/4) wide, and 2/12 (or 1/6) from left. It is a 75%-wide <div> that is centred on the screen. -->
+        <form role="form"> <!-- An HTML form used to collect user input -->
+          <div class="form-group"> <!-- BOOTSTRAP: -->
+            <!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
+            <input type="text" class="form-control input-lg text-center" placeholder="I want to buy a puppy that will love me forever" ng-model="formData.text">
+                            <!-- the ngModel directive binds an "input", "select", "textarea" (or custom form control) to a property on the scope.
+                                  It uses "NgModelController" to do so. This controller is defined as a tag to the body "ng-controller="mainController"".
+                                  The mainController resides in core.js. -->                          
+          </div>
+
+          <!-- createToDo() WILL CREATE NEW TODOS -->
+          <button type="submit" class="btn btn-primary btn-lg" ng-click="createToDo()">Add</button> <!-- "createToDo()" exists in core.js, which was added to this as a script.
+                                                                                                          "btn-primary" is a button style. There are 7 button styles.
+                                                                                                          "btn-lg" is a button size. There are 4 button sizes:
+                                                                                                            .btn-lg; .btn-md; .btn-sm; .btn-xs. -->
+        </form>
+      </div>
+    </div>
+
+  </div>
+</body>
+
+</html>
